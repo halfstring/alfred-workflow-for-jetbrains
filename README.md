@@ -43,3 +43,8 @@ Use "root [command] --help" for more information about a command.
 ```
 
 
+## 使用效果
+
+![./images/command_cli.jpg](./images/command_cli.jpg)
+
+![./images/alfred.jpg](./images/alfred.jpg)
