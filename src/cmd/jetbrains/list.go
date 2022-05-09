@@ -1,21 +1,20 @@
-package cmd
+package jetbrains
 
 import (
 	"bufio"
 	"fmt"
+	"github.com/spf13/cobra"
 	"jetbrains-workflow/golang/tools"
 	"os"
 	"strings"
-
-	"github.com/spf13/cobra"
 )
 
 func init() {
-	rootCmd.AddCommand(listCommand)
+	//cmd.RootCmd.AddCommand(ListCommand)
 }
 
-var listCommand = &cobra.Command{
-	Use:   "list",
+var ListCommand = &cobra.Command{
+	Use:   "project/list",
 	Short: "fetch all your projects",
 	Run: func(cmd *cobra.Command, args []string) {
 		dataDir, _ := tools.GetDataDir(cmd)
@@ -47,11 +46,16 @@ var listCommand = &cobra.Command{
 			line := buf.Text()
 
 			p := strings.Split(line, "\t")
-			if len(p) != 2 {
+			if len(p) != 2 && len(p) != 3 {
 				continue
 			}
 
-			fmt.Println(p[0], "\t", p[1])
+			if len(p) == 3 {
+				fmt.Println(p[0], "\t", p[1], "\t", p[2])
+			} else {
+				fmt.Println(p[0], "\t", p[1])
+			}
+
 		}
 
 		fmt.Println("Over")

@@ -1,5 +1,12 @@
 # Alfred workflow for jetbrains
 
+## CHANGELOG
+
+``` 
+- 项目支持指定plate的严格模式，默认不开启。
+  - add时指定plate，search动作时候仅仅检出plate匹配及为指定plate的项目。
+```
+
 ## 编译处理程序(或者直接下载 bin/jetbrains)
 ``` 
 >  go build -o jetbrains main.go

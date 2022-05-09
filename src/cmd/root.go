@@ -5,6 +5,8 @@ import (
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"jetbrains-workflow/golang/cmd/jetbrains"
+	"jetbrains-workflow/golang/cmd/languages"
 	"os"
 )
 
@@ -12,7 +14,7 @@ var (
 	// Used for flags.
 	cfgFile string
 
-	rootCmd = &cobra.Command{
+	RootCmd = &cobra.Command{
 		Use:   "root",
 		Short: "Jetbrains项目管理工具",
 		Long:  `Jetbrains项目管理工具`,
@@ -21,7 +23,7 @@ var (
 
 // Execute executes the root command.
 func Execute() error {
-	return rootCmd.Execute()
+	return RootCmd.Execute()
 }
 
 func init() {
@@ -31,9 +33,16 @@ func init() {
 	//rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "author name for copyright attribution")
 	//rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")
 	//rootCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
-	rootCmd.PersistentFlags().Bool("debug", true, "Debug Mod")
-	rootCmd.PersistentFlags().String("bin", "/usr/local/bin/pstorm", "Application Path")
-	rootCmd.PersistentFlags().String("data-dir", os.Getenv("HOME"), "Storage Data Dir")
+	RootCmd.PersistentFlags().Bool("debug", true, "Debug Mod")
+	RootCmd.PersistentFlags().String("bin", "/usr/local/bin/pstorm", "Application Path")
+	RootCmd.PersistentFlags().String("data-dir", os.Getenv("HOME"), "Storage Data Dir")
+
+	RootCmd.AddCommand(jetbrains.AddCmd)
+	RootCmd.AddCommand(jetbrains.ListCommand)
+	RootCmd.AddCommand(jetbrains.RemoveCommand)
+	RootCmd.AddCommand(jetbrains.SearchCommand)
+
+	RootCmd.AddCommand(languages.GoogleCmd)
 }
 
 func initConfig() {

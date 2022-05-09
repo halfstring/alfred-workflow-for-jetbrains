@@ -1,4 +1,4 @@
-package cmd
+package jetbrains
 
 import (
 	"bufio"
@@ -12,14 +12,14 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(removeCommand)
+	//cmd.RootCmd.AddCommand(RemoveCommand)
 
-	removeCommand.Flags().String("name", "", "filter project name")
+	RemoveCommand.Flags().String("name", "", "filter project name")
 	//searchCommand.Flags().Bool("debug", false, "Debug Mod")
 }
 
-var removeCommand = &cobra.Command{
-	Use:   "remove",
+var RemoveCommand = &cobra.Command{
+	Use:   "project/remove",
 	Short: "remove a project",
 	Run: func(cmd *cobra.Command, args []string) {
 		name, _ := cmd.Flags().GetString("name")
@@ -55,7 +55,7 @@ var removeCommand = &cobra.Command{
 
 		buf := bufio.NewScanner(fileRead)
 
-		var projects = make(map[string]string)
+		//var projects = make(map[string]string)
 
 		pStr := ""
 		for {
@@ -65,13 +65,17 @@ var removeCommand = &cobra.Command{
 			line := buf.Text()
 
 			p := strings.Split(line, "\t")
-			if len(p) != 2 {
+			if len(p) != 2 && len(p) != 3 {
 				continue
 			}
 
 			if strings.ToLower(p[0]) != strings.ToLower(name) {
-				projects[p[0]] = p[1]
-				pStr = pStr + p[0] + "\t" + p[1] + "\n"
+				//projects[p[0]] = p[1]
+				pStr += p[0] + "\t" + p[1]
+				if len(p) == 3 {
+					pStr += "\t" + p[2]
+				}
+				pStr += "\n"
 			} else {
 				fmt.Println(name, "被移除.")
 			}

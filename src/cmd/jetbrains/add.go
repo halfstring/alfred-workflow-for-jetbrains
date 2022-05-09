@@ -1,4 +1,4 @@
-package cmd
+package jetbrains
 
 import (
 	"bufio"
@@ -10,18 +10,20 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(addCmd)
-
-	addCmd.Flags().String("name", "", "Project Name.")
-	addCmd.Flags().String("path", "", "Project Path.")
+	AddCmd.Flags().String("name", "", "Project Name.")
+	AddCmd.Flags().String("path", "", "Project Path.")
+	AddCmd.Flags().String("plate", "", "Project plate(eg: phpstorm, goland or other).")
 }
 
-var addCmd = &cobra.Command{
-	Use:   "add",
+var AddCmd = &cobra.Command{
+	Use:   "project/add",
 	Short: "add project",
 	Run: func(cmd *cobra.Command, args []string) {
 		name, _ := cmd.Flags().GetString("name")
 		path, _ := cmd.Flags().GetString("path")
+		plate, _ := cmd.Flags().GetString("plate")
+		plate = strings.ToLower(plate)
+
 		if name == "" {
 			println("name不能为空")
 			os.Exit(1)
@@ -56,14 +58,15 @@ var addCmd = &cobra.Command{
 		projects := make(map[string]string)
 		for {
 			if !buf.Scan() {
-				break //文件读完了,退出for
+				break
 			}
-			line := buf.Text() //获取每一行
+			line := buf.Text()
 
 			p := strings.Split(line, "\t")
-			if len(p) != 2 {
+			if len(p) != 2 && len(p) != 3 {
 				continue
 			}
+
 			projects[p[0]] = p[1]
 		}
 
@@ -72,8 +75,9 @@ var addCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		fmt.Println(name + "\t" + path + "\t" + plate + "\n")
 		n, _ := fil.Seek(0, os.SEEK_END)
-		_, err = fil.WriteAt([]byte(name+"\t"+path+"\n"), n)
+		_, err = fil.WriteAt([]byte(name+"\t"+path+"\t"+plate+"\n"), n)
 
 		fmt.Println(name + " is added successfully. ")
 	},
